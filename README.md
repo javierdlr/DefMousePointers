@@ -5,8 +5,6 @@ DefMousePointer is a tool to change image pointers on the fly. It has a ReAction
        MAKE A BACKUP OF 'ENVARC:Sys/def_#?pointer.info' AS THIS TOOL    
              NEED SUCH FILES _NOT_ TO RESIDE IN 'ENVARC:Sys/'.          
    *********************************************************************
-DefMousePointer is a tool to change image pointers on the fly.
-It has a ReAction GUI and a CLI/Shell support too.
 
 ReAction GUI:
 -Launch from Workbench with WBSTARTUP tooltype disabled and you get a nice
