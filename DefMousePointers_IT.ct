@@ -1,0 +1,147 @@
+## version $VER: DefMousePointers.catalog 50.1 (15.08.2015)
+## codeset 0
+## language italiano
+## chunk AUTH Translated by Samir Hawamdeh (http://www.betatesting.it/backforthefuture)
+;
+; ATO Italia
+; Compiled with FlexCat 2.17 PPC (AmigaOS4)
+; flexcat DefMousePointers.cd DefMousePointers.ct catalog=DefMousePointers.catalog
+; 
+; Italian translation of DefMousePointers
+;
+; Traduzione italiana di DefMousePointers
+;
+;
+; GUI STRINGS
+;
+MSG_GUI_GROUP_CHOOSER
+Temi puntatori del mouse
+; Mouse Pointers Themes
+;
+MSG_GUI_GROUP_LB
+Puntatori del mouse disponibili
+; Available Mouse Pointers
+;
+MSG_GUI_LB_NAME
+Nome
+; Name
+;
+MSG_GUI_LB_IMAGE
+Immagine
+; Image
+;
+MSG_GUI_SAVE
+_Salva
+; _Save
+;
+MSG_GUI_USE
+_Usa
+; _Use
+;
+MSG_GUI_QUIT
+_Esci
+; _Quit
+;
+MSG_GUI_CHOOSER_INFO
+Il tema selezionato contiene %ld puntatori del mouse
+; Selected theme has %ld mouse pointers
+;
+;
+; MISC
+;
+MSG_OK_GAD
+_OK
+; _OK
+;
+MSG_CONT_CANCEL_GAD
+_Continua|_Annulla
+; C_ontinue|_Cancel
+;
+;
+; ERRORS/WARNINGS (WB/CLI)
+;
+MSG_ERROR_NOGUI
+Impossibile aprire le classi ReAction.
+; Failed to open ReAction classes.
+;
+MSG_ERROR_BCOPY_MEM
+Impossibile allocare memoria per la copia dei puntatori.\n
+; Can't allocate memory for copying pointers.\n
+;
+MSG_ERROR_LIB
+Impossibile aprire '%s' V%ld!
+; Can't open '%s' V%ld!
+; LIBRARY/CLASS NAME, VERSION
+;
+MSG_ERROR_OPEN
+Impossibile aprire '%s'!
+; Can't open '%s'!
+; IFACE NAME
+;
+MSG_ERROR_COPY_POINTERS
+Errores durante la copia del nuovo tema puntatori.
+; Errors while copying new theme pointer.
+;
+MSG_ERROR_DEL_POINTERS
+\033cAlcuni puntatori sembrano essere inutilizzati perciò\n\
+non potranno essere cancellati (sono inesistenti ?)
+; \033cSome unused pointers couldn't be deleted.\n\
+; (non existing?)
+;
+MSG_SAVE_WARNING
+\033cI puntatori che non fanno parte del tema '\033b%s\033n'\n\
+saranno cancellati dal tuo computer!
+; \033cPointers not being part of '\033b%s\033n' theme\n\
+; will be deleted on your system!
+; NAME OF THEME POINTER
+;
+MSG_WARN_NO_POINTERTHEMES
+\033cImpossibile caricare i temi puntatore,\n\
+uscita da DefMousePointers.
+; \033cCan't load pointer themes,\n\
+; quitting DefMousePointers.
+;
+MSG_WARN_NOPREFSFILE
+File delle preferenze '%s' non trovato!\n
+; No prefs file '%s' found!\n
+;
+MSG_ERROR_POINTERSDRAWER
+\033cCaricamento della cartella 'POINTERS' fallito:\n\
+%s.
+; \033cFailed to load 'POINTERS' drawer:\n\
+; %s.
+; ERROR (IOERR) MESSAGE
+;
+MSG_WARN_NO_POINTERFILES
+\033cAlmeno un puntatore nella cartella del tema\n\
+sembra essere vuoto, uscita da DefMousePointers.
+; \033cAt least one pointer theme drawer seems\n\
+; empty, quitting DefMousePointers.
+;
+MSG_ERROR_COPY_POINTERTHEME
+Impossibile caricare il tema puntatori '%s': %s.\n
+; Failed to load pointer theme '%s': %s.\n
+;
+;
+; CLI/SHELL STRINGS
+;
+MSG_CLI_TRANSLATOR
+Traduzione italiana a cura di Samir Hawamdeh
+; \0
+; WHATEVER YOU WANT. ex.: ' Localization by MeMyselfAndI'
+;
+MSG_CLI_ABOUT
+Copia tema puntatori (precedentemente salvato con la sua GUI) in 'ENV:Sys/'.\n\
+Lancialo dal Workbench per usufruire dell'interfaccia ReAction.\n
+; Copy pointer theme (previously saved with its GUI) to 'ENV:Sys/'.\n\
+; Launch it from WB to get a nice ReAction GUI.\n
+;
+MSG_CLI_WRONG_ARGS
+Argomenti errati!\n
+; Wrongs args!\n
+;
+MSG_CLI_INFO
+Copiato tema puntatori '%s' contenente %ld puntatori in '%s'.\n
+; Copied '%s' pointer theme with %ld pointers to '%s'.\n
+; POINTER THEME NAME, POINTERS NUMBER, DESTINATION DRAWER
+;

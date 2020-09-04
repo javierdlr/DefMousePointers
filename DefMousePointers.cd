@@ -1,0 +1,104 @@
+; $VER: defmousepointers.cd 50.1 (18.09.2019)
+;
+;
+; GUI STRINGS
+MSG_GUI_GROUP_CHOOSER (1//)
+Mouse Pointers Themes
+;
+MSG_GUI_GROUP_LB (2//)
+Available Mouse Pointers
+;
+MSG_GUI_LB_NAME (3//)
+Name
+;
+MSG_GUI_LB_IMAGE (4//)
+Image
+;
+MSG_GUI_SAVE (5//)
+_Save
+;
+MSG_GUI_USE (6//)
+_Use
+;
+MSG_GUI_QUIT (7//)
+_Quit
+;
+MSG_GUI_CHOOSER_INFO (8//500)
+Selected theme has %ld mouse pointers
+;
+;
+; MISC
+MSG_OK_GAD (9//)
+_OK
+;
+MSG_CONT_CANCEL_GAD (10//)
+C_ontinue|_Cancel
+;
+;
+; ERRORS/WARNINGS (WB/CLI)
+MSG_ERROR_NOGUI (11//)
+Failed to open ReAction classes.
+;
+MSG_ERROR_BCOPY_MEM (12//)
+Can't allocate memory for copying pointers.\n
+;
+MSG_ERROR_LIB (13//500)
+Can't open '%s' V%ld!
+; LIBRARY/CLASS NAME, VERSION
+;
+MSG_ERROR_OPEN (14//500)
+Can't open '%s'!
+; IFACE NAME
+;
+MSG_ERROR_COPY_POINTERS (15//)
+Errors while copying new theme pointer.
+;
+MSG_ERROR_DEL_POINTERS (16//)
+\033cSome unused pointers couldn't be deleted.\n\
+(non existing in 'ENV:Sys/')
+;
+MSG_SAVE_WARNING (17//500)
+\033cPointers not being part of\n\
+\033b%s \033ntheme\n\
+will be deleted on your system!
+; NAME OF THEME POINTER
+;
+MSG_WARN_NO_POINTERTHEMES (18//)
+\033cCan't load pointer themes,\n\
+closing DefMousePointers.
+;
+MSG_WARN_NOPREFSFILE (19//)
+No prefs file '%s' found!\n
+;
+MSG_ERROR_POINTERSDRAWER (20//)
+\033cFailed to load 'POINTERS' drawer:\n\
+%s.
+; ERROR (IOERR) MESSAGE
+;
+MSG_WARN_NO_POINTERFILES (21//)
+\033cAt least one pointer theme drawer seems\n\
+empty, closing DefMousePointers.
+;
+MSG_ERROR_COPY_POINTERTHEME (22//)
+Failed to load pointer theme '%s': %s.\n
+;  NAME OF THEME POINTER; ERROR (IOERR) MESSAGE
+;
+; CLI/SHELL STRINGS
+MSG_CLI_TRANSLATOR (23//100)
+\0
+; WHATEVER YOU WANT. ex.: ' Localization by MeMyselfAndI'
+;
+MSG_CLI_ABOUT (24//)
+Copy pointer theme (previously saved with its GUI) to 'ENV:Sys/'.\n\
+Launch it from WB to get a nice ReAction GUI.\n
+;
+MSG_CLI_WRONG_ARGS (25//)
+Wrongs args!\n
+;
+MSG_CLI_INFO (26//)
+Copied '%s' pointer theme with %ld pointers to '%s'.\n
+; POINTER THEME NAME, TOTAL POINTERS, DESTINATION DRAWER
+;
+MSG_CLI_FAILED_CENTERMOUSE (27//)
+Failed to center mouse pointer!
+;
