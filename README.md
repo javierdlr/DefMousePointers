@@ -14,7 +14,7 @@ ReAction GUI:
  [SAVE]: creates a preferences file (inside 'POINTERS' drawer) with
          choosed pointer theme name (see CLI/Shell for more info).
 
- [USE] : copies pointer theme images/icons (def_#?pointe.info) to
+ [USE] : copies pointer theme images/icons (def_#?pointer.info) to
          'ENV:Sys/' so you can use such pointers.
 
  [QUIT]: exits program.
@@ -43,11 +43,15 @@ b)Or follow this steps:
 
 NOTES:
 1)Why to (re)move such icons from 'ENVARC:Sys/'?
-If I have in 'ENVARC:Sys/' only def_pointer.info and the pointer theme I
+-If I have in 'ENVARC:Sys/' only def_pointer.info and the pointer theme I
 choose doesn't have one def_pointer.info, when I click on Use button, such
 image will be used, 'cos env-handler (kickstart module) clones 'ENVARC:'
 (theme doesn't have 'def_pointer.info', but alas it exists in 'ENVARC:'..).
-2)When using from U-S, pointers sometimes aren't loaded, known problem [WIP].
+2)When using from U-S, pointers sometimes aren't loaded!
+-Known problem [WIP].
+3)Why are 2 icons DefMousePointers and DefMousePointers_GUI?
+-DefMousePointers_GUI pops up the GUI and DefMousePointers is to be used
+in WBStartup.
 
 
 SPECIAL THANKS:
@@ -56,7 +60,8 @@ Tuomas Hokka for 'BufferCopy()' code.
 Thomas Rapp & Wolfgang Hosemann for 'CenterMousePointer()' code.
 Everyone at os4coding forum!
 Testers/Translators: Guillaume 'zzd10h' Boesel, Samir 'samo79' Hawamdeh.
-
+                     Hubert 'raziel' Maier.
+  
 
 AUTHOR
 Javier de las Rivas <jabierdlr@gmail.com>
