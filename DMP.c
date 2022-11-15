@@ -1,10 +1,4 @@
-//#define _WDEBUG_
-#ifdef _WDEBUG_
-    #define DBUG(x,...) IExec->DebugPrintF("[%s|%s:%-4ld] "x, CLASSNAME,__FILE__,__LINE__, ##__VA_ARGS__)
-#else
-    #define DBUG(x,...)
-#endif
-
+#include "debug.h"
 
 #define CATCOMP_NUMBERS
 #define CATCOMP_BLOCK
@@ -18,9 +12,13 @@ struct LocaleInfo li;
 const char *version = VERSTAG;
 STRPTR textbuf,       // for localized messages
        dmp_name,      // DMP executable name
-       pointers_path; // DMP fullpath (name NOT included) + 'POINTERS' drawer
+       pointers_path; // DMP path + 'POINTERS' drawer
 struct List *listbrowser_list;
 struct WBStartup *WBenchMsg = NULL;
+#if defined(DEBUG)
+uint16 count=1; // only for debuging purpouses
+#endif
+
 
 //DMP_cli.c
 extern void ListDMP_CLI(STRPTR, LONG);
@@ -30,30 +28,31 @@ extern void CenterMousePointer(void);
 
 int main(int argc, char **argv)
 {
- textbuf = IExec->AllocVecTags(MAX_TXTB, TAG_DONE);
+ textbuf = IExec->AllocVecTags(DMP_MAX_TXTB, TAG_DONE);
 
  if(argc == 0)
  {
   WBenchMsg = (struct WBStartup *)argv;
  }
+DBUG("WBenchMsg=0x%08lx\n",WBenchMsg);
 
- if( OpenLibs((int32)WBenchMsg) )
+ if( OpenLibs((uint32)WBenchMsg) )
  {
-  pointers_path = IExec->AllocVecTags(MAX_PREF, TAG_DONE);
-  dmp_name = IExec->AllocVecTags(MAX_FNAME, TAG_DONE);
+  pointers_path = IExec->AllocVecTags(DMP_MAX_PREF, TAG_DONE);
+  dmp_name = IExec->AllocVecTags(DMP_MAX_FNAME, TAG_DONE);
 
   if(WBenchMsg)
-  {// Running from WORKBENCH: open ReAction GUI
-   IDOS->NameFromLock(WBenchMsg->sm_ArgList->wa_Lock, pointers_path, MAX_PREF);
-   IDOS->AddPart(pointers_path, "POINTERS", MAX_PREF);
-   IUtility->Strlcpy(dmp_name, WBenchMsg->sm_ArgList->wa_Name, MAX_FNAME);
+  {// Running from WORKBENCH
+   IDOS->NameFromLock(WBenchMsg->sm_ArgList->wa_Lock, pointers_path, DMP_MAX_PREF);
+   IDOS->AddPart(pointers_path, "POINTERS", DMP_MAX_PREF);
+   IUtility->Strlcpy(dmp_name, WBenchMsg->sm_ArgList->wa_Name, DMP_MAX_FNAME);
 DBUG("'%s' started from WB\n",dmp_name);
    DMP_from_WB();
   }
   else
-  {// Running from SHELL/CLI: parse arguments
-   IDOS->NameFromLock(IDOS->GetProgramDir(), pointers_path, MAX_PREF);
-   IDOS->AddPart(pointers_path, "POINTERS", MAX_PREF);
+  {// Running from SHELL/CLI
+   IDOS->NameFromLock(IDOS->GetProgramDir(), pointers_path, DMP_MAX_PREF);
+   IDOS->AddPart(pointers_path, "POINTERS", DMP_MAX_PREF);
 DBUG("'%s' started from CLI\n",argv[0]);
    DMP_from_CLI();
   }
@@ -70,7 +69,7 @@ DBUG("'%s' started from CLI\n",argv[0]);
 
 
 /* Open required (mode WB/CLI) libs/classes */
-BOOL OpenLibs(int32 gui_mode)
+BOOL OpenLibs(uint32 gui_mode)
 {
  li.li_Catalog = NULL;
  if( (LocaleBase = IExec->OpenLibrary("locale.library", 52)) &&
@@ -117,14 +116,14 @@ BOOL OpenLibs(int32 gui_mode)
   IconBase = IExec->OpenLibrary("icon.library", 52);
   if(!IconBase)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"icon.library",52);
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"icon.library",52);
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
   IIcon = (struct IconIFace *)IExec->GetInterface(IconBase, "main", 1, NULL);
   if(!IIcon)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"IconIFace");
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"IconIFace");
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
@@ -157,14 +156,14 @@ BOOL OpenLibs(int32 gui_mode)
   ListBrowserBase = (struct Library *)IIntuition->OpenClass("gadgets/listbrowser.gadget", 52, &ListBrowserClass);
   if(!ListBrowserBase)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"listbrowser.gadget",52);
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"listbrowser.gadget",52);
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
   IListBrowser = (struct ListBrowserIFace *)IExec->GetInterface( (struct Library*)ListBrowserBase, "main", 1, NULL );
   if(!IListBrowser)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"ListBrowserIFace");
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"ListBrowserIFace");
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
@@ -172,14 +171,14 @@ BOOL OpenLibs(int32 gui_mode)
   ChooserBase = (struct Library *)IIntuition->OpenClass("gadgets/chooser.gadget", 52, &ChooserClass);
   if(!ChooserBase)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"chooser.gadget",52);
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_LIB),"chooser.gadget",52);
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
   IChooser = (struct ChooserIFace *)IExec->GetInterface( (struct Library *)ChooserBase, "main", 1, NULL);
   if(!IChooser)
   {
-   IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"ChooserIFace");
+   IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_OPEN),"ChooserIFace");
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
    return FALSE;
   }
@@ -225,30 +224,37 @@ void CloseLibs(void)
 /* DefMousePointer is in WB mode */
 void DMP_from_WB(void)
 {
- STRPTR theme, TTarg = NULL;;
+ STRPTR TTarg = NULL;
  int32 pointers_tot;
- struct Node *node = NULL;
  struct DiskObject *dobj = NULL;
  BPTR file = 0;
  struct List *chooser_list = NULL;
 
- IUtility->SNPrintf(textbuf, MAX_TXTB, "PROGDIR:%s",WBenchMsg->sm_ArgList->wa_Name);
+ IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, "PROGDIR:%s",WBenchMsg->sm_ArgList->wa_Name);
+DBUG("DMP_from_WB() '%s'\n",textbuf);
  dobj = IIcon->GetDiskObjectNew(textbuf); // get disk object
+DBUG("dobj=0x%08lx\n",dobj);
  if(dobj)
  {
+  STRPTR theme = IExec->AllocVecTags(DMP_MAX_THEME, AVT_ClearWithValue,NULL, TAG_DONE);
+
+  // Get theme name and create fullpath
+  IUtility->Strlcpy(textbuf, pointers_path, DMP_MAX_TXTB);
+  IDOS->AddPart(textbuf, PREFS_FILENAME, DMP_MAX_TXTB);
+DBUG("'%s'\n",textbuf);
+  if( (file=IDOS->Open(textbuf, MODE_OLDFILE)) )
+  {
+   IDOS->FGets(file, theme, DMP_MAX_THEME);
+   IDOS->Close(file);
+  }
+
   TTarg = IIcon->FindToolType(dobj->do_ToolTypes, "WBSTARTUP"); // check for "WBSTARTUP" tooltype
   if(TTarg)
   {
-   // Get theme name and create fullpath
-   IUtility->Strlcpy(textbuf, pointers_path, MAX_TXTB);
-   IDOS->AddPart(textbuf, PREFS_FILENAME, MAX_TXTB);
-   if( (file=IDOS->Open(textbuf, MODE_OLDFILE)) )
+   if(theme[0] != '\0')
    {
-    IDOS->FGets(file, theme, MAX_THEME);
-    IDOS->Close(file);
-
-    IUtility->Strlcpy(textbuf, pointers_path, MAX_TXTB);
-    IDOS->AddPart(textbuf, theme, MAX_TXTB); // theme drawer fullpath
+    IUtility->Strlcpy(textbuf, pointers_path, DMP_MAX_TXTB);
+    IDOS->AddPart(textbuf, theme, DMP_MAX_TXTB); // theme drawer fullpath
 
     ListDMP_CLI(textbuf, 0); // copy pointers to ENV:Sys/
    }
@@ -260,14 +266,13 @@ void DMP_from_WB(void)
    chooser_list = (struct List *)IExec->AllocSysObject(ASOT_LIST, NULL);
    listbrowser_list = (struct List *)IExec->AllocSysObject(ASOT_LIST, NULL);
 
-   // Get themes/drawers list and show 1st in chooser_list
+   // Get themes/drawers list and show in chooser_list
    if( make_chooser_list(chooser_list) )
    {
-    node = IExec->GetHead(chooser_list);
-    IChooser->GetChooserNodeAttrs(node, CNA_Text,&theme, TAG_DONE);
-//DBUG("0x%08lx '%s' (1st node)\n",node,theme);
+    struct Node *node = getSavedThemeNode(chooser_list, theme);
+DBUG("0x%08lx '%s'\n",node,theme);
     pointers_tot = ListDMP_WB(theme); // get theme's/drawer's mouse pointers list
-    DMPwindow(pointers_tot, chooser_list); // show GUI and process events
+    DMPwindow(pointers_tot, chooser_list, node); // show GUI and process events
 
     free_chooser_list(chooser_list);
    }
@@ -281,6 +286,7 @@ void DMP_from_WB(void)
    IExec->FreeSysObject(ASOT_LIST, chooser_list);
   }
 
+  IExec->FreeVec(theme);
   IIcon->FreeDiskObject(dobj);
  }
 }
@@ -290,17 +296,17 @@ void DMP_from_WB(void)
 //#define IMG_H 42
 int32 ListDMP_WB(STRPTR theme_name)
 {
- STRPTR theme_drawer_name = IExec->AllocVecTags(MAX_TDRW, TAG_DONE),
-        pointer_fullname = IExec->AllocVecTags(MAX_SRC, TAG_DONE), // fullpath + pointer name
-        pattern_ms = IExec->AllocVecTags(MAX_PATTERN, TAG_DONE);
+ STRPTR theme_drawer_name = IExec->AllocVecTags(DMP_MAX_FILE, TAG_DONE),
+        pointer_fullname = IExec->AllocVecTags(DMP_MAX_SRC, TAG_DONE), // fullpath + pointer name
+        pattern_ms = IExec->AllocVecTags(DMP_MAX_PATTERN, TAG_DONE);
  int32 success = 0;
  struct Node *n = NULL;
  struct DiskObject *icon = NULL;
+DBUG("ListDMP_WB(%s)\n",theme_name);
+ IUtility->Strlcpy(theme_drawer_name, pointers_path, DMP_MAX_FILE);
+ IDOS->AddPart(theme_drawer_name, theme_name, DMP_MAX_FILE);
 
- IUtility->Strlcpy(theme_drawer_name, pointers_path, MAX_TDRW);
- IDOS->AddPart(theme_drawer_name, theme_name, MAX_TDRW);
-
- IDOS->ParsePatternNoCase("def_#?pointer.info", pattern_ms, MAX_PATTERN);
+ IDOS->ParsePatternNoCase("def_#?pointer.info", pattern_ms, DMP_MAX_PATTERN);
 
  APTR context = IDOS->ObtainDirContextTags(EX_StringNameInput, theme_drawer_name,
                                            EX_DataFields, (EXF_NAME|EXF_TYPE),
@@ -317,18 +323,18 @@ int32 ListDMP_WB(STRPTR theme_name)
   {
    if( EXD_IS_FILE(dat) )
    {
-    IUtility->Strlcpy(pointer_fullname, theme_drawer_name, MAX_SRC);
-    IDOS->AddPart(pointer_fullname, dat->Name, MAX_SRC);
+    IUtility->Strlcpy(pointer_fullname, theme_drawer_name, DMP_MAX_SRC);
+    IDOS->AddPart(pointer_fullname, dat->Name, DMP_MAX_SRC);
     pointer_fullname[IUtility->Strlen(pointer_fullname) - 5] = '\0'; // remove '.info'
 //DBUG("'%s'\n",pointer_fullname);
-    icon = IIcon->GetIconTags(pointer_fullname,
+    if( !(icon=IIcon->GetIconTags(pointer_fullname,
                               ICONGETA_FailIfUnavailable, TRUE, 
                               ICONGETA_UseFriendBitMap, TRUE,
                               //ICONGETA_Width,IMG_W,
                               //ICONGETA_Height,IMG_H, 
                               //ICONGETA_ForceScaling, TRUE,
                               //ICONGETA_AllowUpscaling, TRUE,
-                             TAG_END);
+                             TAG_END)) ) break;
 
     if( (n=IListBrowser->AllocListBrowserNode(TOT_COL,//TOTALCOLUMNS,
                                               LBNA_Column,COL_IMG,
@@ -339,10 +345,8 @@ int32 ListDMP_WB(STRPTR theme_name)
                                                //LBNCA_HorizJustify,LCJ_CENTER,
                                              TAG_DONE)) )
     {
-//DBUG("1 node=0x%08lx (list=0x%08lx)\n",n,listbrowser_list);
      IExec->AddTail(listbrowser_list, n);
-//DBUG("2 '%s' (%s)\n",theme_drawer_name,dat->Name);
-     success++;
+     ++success;
 //DBUG("%2ld)MOUSEPOINTER='%s' [0x%08lx]\n",success,dat->Name,n);
     }
    }
@@ -350,14 +354,14 @@ int32 ListDMP_WB(STRPTR theme_name)
   }
   if( ERROR_NO_MORE_ENTRIES != IDOS->IoErr() )
   {
-   IDOS->Fault(IDOS->IoErr(), "[DMP]ListDMP_WB():entries", textbuf, MAX_TXTB);
+   IDOS->Fault(IDOS->IoErr(), GetString(&li,MSG_ERROR_POINTER_DATA), textbuf, DMP_MAX_TXTB);
    DoMessage(textbuf, REQIMAGE_ERROR, NULL);
   }
 
  }
  else
  {
-  IDOS->Fault(IDOS->IoErr(), "[DMP]ListDMP_WB():context", textbuf, MAX_TXTB);
+  IDOS->Fault(IDOS->IoErr(), GetString(&li,MSG_ERROR_NOCONTEXT), textbuf, DMP_MAX_TXTB);
   DoMessage(textbuf, REQIMAGE_ERROR, NULL);
  }
 
@@ -370,21 +374,23 @@ int32 ListDMP_WB(STRPTR theme_name)
 }
 
 
-void DMPwindow(int32 pointers_tot, struct List *list)
+void DMPwindow(int32 pointers_tot, struct List *list, struct Node *sel_nod)
 {
  Object *win_obj = NULL, *Objects[LAST_NUM];
  struct Window *pwindow = NULL;
  struct ColumnInfo *columninfo;
  struct DiskObject *iconify = NULL;
  struct MsgPort *wAppPort = NULL;
- // Used in OBJ(OBJ_CHOOSER_INFO): MSG_GUI_CHOOSER_INFO has '%ld' as argument
- struct { int32 value; }va = {pointers_tot};
+ struct { int32 value; }va = {pointers_tot}; // used in OBJ(OBJ_CHOOSER_INFO): MSG_GUI_CHOOSER_INFO has '%ld' as argument
 //DBUG("pointers_tot=%ld ('%s')\n",pointers_tot,dmp_name);
+//DBUG("sel_nod = 0x%08lx\n",sel_nod);
 
- // reset icon X/Y positions so it iconifies properly on Workbench
- iconify = IIcon->GetIconTags(dmp_name, ICONGETA_FailIfUnavailable,FALSE, TAG_END);
- iconify->do_CurrentX = NO_ICON_POSITION;
- iconify->do_CurrentY = NO_ICON_POSITION;
+ // Reset icon X/Y positions so it iconifies properly on Workbench
+ if( (iconify=IIcon->GetIconTags(dmp_name, ICONGETA_FailIfUnavailable,FALSE, TAG_END)) )
+ {
+  iconify->do_CurrentX = NO_ICON_POSITION;
+  iconify->do_CurrentY = NO_ICON_POSITION;
+ }
 
  wAppPort = IExec->AllocSysObjectTags(ASOT_PORT, TAG_END);
 
@@ -422,9 +428,11 @@ void DMPwindow(int32 pointers_tot, struct List *list)
            LAYOUT_AddChild, OBJ(OID_CHOOSER) = IIntuition->NewObject(ChooserClass, NULL, //"chooser.gadget",
             GA_ID,         OID_CHOOSER,
             GA_RelVerify,  TRUE,
-            GA_Underscore, ~0,
-            CHOOSER_Labels,   list, // themes/drawers list
-            CHOOSER_Selected, 0,
+            GA_Underscore, 0,
+            CHOOSER_Labels,    list, // themes/drawers list
+            //CHOOSER_Selected,  0,
+            CHOOSER_SelectedNode, sel_nod,
+            CHOOSER_MaxLabels, 32,
            TAG_DONE),
            CHILD_WeightedWidth, 0,
            LAYOUT_AddChild, OBJ(OID_CHOOSER_INFO) = IIntuition->NewObject(ButtonClass, NULL,
@@ -450,12 +458,13 @@ void DMPwindow(int32 pointers_tot, struct List *list)
             LISTBROWSER_ColumnInfo,      columninfo,
             LISTBROWSER_ColumnTitles,    TRUE,
             LISTBROWSER_Selected,        -1,
-            LISTBROWSER_MinVisible,      5,
+            //LISTBROWSER_MinVisible,      5,
             //LISTBROWSER_Striping,        LBS_ROWS,
             LISTBROWSER_HorizSeparators, TRUE,
             //LISTBROWSER_VertSeparators,  FALSE,
             LISTBROWSER_Spacing,         4,
            TAG_DONE),
+           CHILD_MinHeight, 300,
           TAG_DONE),
 
           LAYOUT_AddChild, IIntuition->NewObject(LayoutClass, NULL, //"layout.gadget",
@@ -488,7 +497,9 @@ void DMPwindow(int32 pointers_tot, struct List *list)
   char *res_string = NULL;
   uint16 code = 0;
   uint32 siggot = 0, result = WMHI_LASTMSG, res_node, res_value,
-         wsigmask = 0, prev_chooser = 0;
+         wsigmask = 0, prev_chooser;
+
+  IIntuition->GetAttr(CHOOSER_Selected, OBJ(OID_CHOOSER), &prev_chooser);
 
   while(done)
   {
@@ -537,7 +548,7 @@ DBUG("OID_SAVE\n");
 
         done = FALSE;
 
-        IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_SAVE_WARNING),res_string);
+        IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_SAVE_WARNING),res_string);
         APTR lock = SleepWindow(pwindow);
         res_value = DoMessage(textbuf, REQIMAGE_WARNING, (STRPTR)GetString(&li,MSG_CONT_CANCEL_GAD));
         WakeWindow(pwindow, lock);
@@ -547,9 +558,9 @@ DBUG("OID_SAVE\n");
          break;
         }
 
-        prefs_file = IExec->AllocVecTags(MAX_PREF, TAG_DONE);
-        IUtility->Strlcpy(prefs_file, pointers_path, MAX_PREF);
-        IDOS->AddPart(prefs_file, PREFS_FILENAME, MAX_PREF);
+        prefs_file = IExec->AllocVecTags(DMP_MAX_PREF, TAG_DONE);
+        IUtility->Strlcpy(prefs_file, pointers_path, DMP_MAX_PREF);
+        IDOS->AddPart(prefs_file, PREFS_FILENAME, DMP_MAX_PREF);
         if( (file=IDOS->Open(prefs_file, MODE_NEWFILE)) )
         {
          IDOS->FPrintf(file, "%s",res_string);
@@ -557,7 +568,8 @@ DBUG("OID_SAVE\n");
         }
         IExec->FreeVec(prefs_file);
 
-        if(DeletePointers() == 0)
+        done = usePointers(res_string, pwindow);
+        /*if(DeletePointers() == 0)
         {
          DoMessage( (STRPTR)GetString(&li,MSG_ERROR_DEL_POINTERS), REQIMAGE_WARNING, NULL );
          done = TRUE;
@@ -569,12 +581,14 @@ DBUG("OID_SAVE\n");
          DoMessage( (STRPTR)GetString(&li,MSG_ERROR_COPY_POINTERS), REQIMAGE_WARNING, NULL );
          WakeWindow(pwindow, lock);
          done = TRUE;
-        }
+        }*/
        break;
        }
 
        case OID_USE:
 DBUG("OID_USE\n");
+        usePointers(res_string, pwindow);
+/*
 DBUG("\tDELETING pointers not from theme '%s'\n",res_string);
         if(DeletePointers() == 0)
         {
@@ -587,6 +601,7 @@ DBUG("\tDELETING pointers not from theme '%s'\n",res_string);
          DoMessage( (STRPTR)GetString(&li,MSG_ERROR_COPY_POINTERS), REQIMAGE_WARNING, NULL );
          WakeWindow(pwindow, lock);
         }
+*/
        break;
 
        case OID_QUIT:
@@ -659,7 +674,7 @@ int CompareNameNodes(struct Hook *hook, struct Node *node1, struct Node *node2)
 
  IChooser->GetChooserNodeAttrs(node1, CNA_Text,&name1, TAG_DONE);
  IChooser->GetChooserNodeAttrs(node2, CNA_Text,&name2, TAG_DONE);
-DBUG("[0x%08lx]'%s' <-?-> [0x%08lx]'%s'\n",node1,name1,node2,name2);
+DBUG("[0x%08lx] %-24s <-?-> [0x%08lx]'%s'\n",node1,name1,node2,name2);
  return( IUtility->Stricmp(name1,name2) );
 }
 
@@ -805,7 +820,7 @@ DBUG("DRAWERNAME[%ld]='%s' added to chooser [0x%08lx]\n",themes_tot,dat->Name,no
   }
   if( ERROR_NO_MORE_ENTRIES != IDOS->IoErr() )
   {
-   IDOS->Fault(IDOS->IoErr(), "[DMP]make_chooser_list():entries", textbuf, MAX_TXTB);
+   IDOS->Fault(IDOS->IoErr(), "[DMP]make_chooser_list():entries", textbuf, DMP_MAX_TXTB);
    DoMessage(textbuf, REQIMAGE_WARNING, NULL);
   }
   if(themes_tot != 0)
@@ -818,7 +833,7 @@ DBUG("DRAWERNAME[%ld]='%s' added to chooser [0x%08lx]\n",themes_tot,dat->Name,no
  else
  {
   IDOS->Fault(IDOS->IoErr(), NULL, text_err, 100);
-  IUtility->SNPrintf(textbuf, MAX_TXTB, GetString(&li,MSG_ERROR_POINTERSDRAWER),text_err);
+  IUtility->SNPrintf(textbuf, DMP_MAX_TXTB, GetString(&li,MSG_ERROR_POINTERSDRAWER),text_err);
   DoMessage(textbuf, REQIMAGE_WARNING, NULL);
  }
 
@@ -849,10 +864,10 @@ void free_chooser_list(struct List *list)
 int32 DeletePointers(void)
 {
  STRPTR res_string,
-        pfile = IExec->AllocVecTags(MAX_FILE, TAG_DONE);
+        pfile = IExec->AllocVecTags(DMP_MAX_FILE, TAG_DONE);
  int32 i, success = 1;
  struct Node *n = NULL;
-
+DBUG("DeletePointers()\n",NULL);
  n = IExec->GetHead(listbrowser_list);
 
  for(i=0; xml_pointers[i]; i++)
@@ -865,8 +880,8 @@ DBUG("%ld) '%s' == '%s';\n",i+1,xml_pointers[i],res_string);
   }
   else
   {
-   IUtility->Strlcpy(pfile, "ENV:Sys/", MAX_FILE);
-   IDOS->AddPart(pfile, xml_pointers[i], MAX_FILE);
+   IUtility->Strlcpy(pfile, "ENV:Sys/", DMP_MAX_FILE);
+   IDOS->AddPart(pfile, xml_pointers[i], DMP_MAX_FILE);
    success &= IDOS->Delete(pfile);
 DBUG("%ld)IDOS->Delete(%s) [%ld];\n",i+1,pfile,success);
   }
@@ -878,27 +893,30 @@ DBUG("%ld)IDOS->Delete(%s) [%ld];\n",i+1,pfile,success);
 
 
 /* Get list of pointers and copy them to 'ENV:Sys/' */
-int CopyPointers(STRPTR theme_drawer)
+int CopyPointers(CONST_STRPTR theme_drawer)
 {
  char *res_string = NULL;
- STRPTR src_file = IExec->AllocVecTags(MAX_SRC, TAG_DONE),
-        dst_file = IExec->AllocVecTags(MAX_DST, TAG_DONE);
+ STRPTR src_file = IExec->AllocVecTags(DMP_MAX_SRC, TAG_DONE),
+        dst_file = IExec->AllocVecTags(DMP_MAX_DST, TAG_DONE);
  int errors = 0;
  struct Node *node = IExec->GetHead(listbrowser_list);
-DBUG("COPYING pointer theme '%s' to 'ENV:Sys/'\n",theme_drawer);
+#if defined(DEBUG)
+ count=1; // only for debuging purpouses
+#endif
+DBUG("CopyPointers('%s') .. to 'ENV:Sys/'\n",theme_drawer);
  // Get SOURCE and DESTINATION files to be copied
  for(; node!=NULL; node=IExec->GetSucc(node) )
  {
   IListBrowser->GetListBrowserNodeAttrs(node, LBNA_Column,COL_TXT, LBNCA_Text,&res_string, TAG_DONE);
 
   // Create source fullpath+name (pointer_path+theme+pointer_filename)
-  IUtility->Strlcpy(src_file, pointers_path, MAX_SRC);
-  IDOS->AddPart(src_file, theme_drawer, MAX_SRC);
-  IDOS->AddPart(src_file, res_string, MAX_SRC);
+  IUtility->Strlcpy(src_file, pointers_path, DMP_MAX_SRC);
+  IDOS->AddPart(src_file, theme_drawer, DMP_MAX_SRC);
+  IDOS->AddPart(src_file, res_string, DMP_MAX_SRC);
 
   // Create destination ('ENV:Sys/'+pointer_filename)
-  IUtility->Strlcpy(dst_file, "ENV:Sys/", MAX_DST);
-  IDOS->AddPart(dst_file, res_string, MAX_SRC);
+  IUtility->Strlcpy(dst_file, "ENV:Sys/", DMP_MAX_DST);
+  IDOS->AddPart(dst_file, res_string, DMP_MAX_SRC);
 
   errors |= BufferedCopy(src_file, dst_file);
  }
@@ -913,7 +931,6 @@ DBUG("COPYING pointer theme '%s' to 'ENV:Sys/'\n",theme_drawer);
 /*****************************************/
 /* This piece of code is by Tuomas Hokka */
 #define BUFF_SIZE 8192
-uint16 count=1; // only for debuging purpouses
 BOOL BufferedCopy(CONST_STRPTR source, CONST_STRPTR target)
 {
  BPTR src, tgt;
@@ -946,21 +963,19 @@ DBUG("TO :'%s'\n",target);
 //DBUG("bytes=%lu\n",count);
     IExec->FreeVec(buff);
     error = FALSE;
-DBUG("copied %ld\n",count++);
-//IExec->DebugPrintF("copied %ld\n",count++);
+DBUG("copied #%ld\n",count++);
    }
    else
    {
     if(WBenchMsg)
     {// WB or CLI/Shell
      DoMessage( (STRPTR)GetString(&li,MSG_ERROR_BCOPY_MEM), REQIMAGE_ERROR, NULL );
-IExec->DebugPrintF("WBerror %ld\n",count++);
+//IExec->DebugPrintF("WBerror %ld\n",count++);
     }
     else
     {
      IDOS->PutErrStr( GetString(&li,MSG_ERROR_BCOPY_MEM) );
-DBUG("ERROR '%s'!!!\n",GetString(&li,MSG_ERROR_BCOPY_MEM));
-IExec->DebugPrintF("CLIerror %ld\n",count++);
+//DBUG("ERROR '%s'!!!\n",GetString(&li,MSG_ERROR_BCOPY_MEM));
     }
    }
 
@@ -969,8 +984,7 @@ IExec->DebugPrintF("CLIerror %ld\n",count++);
   else
   {
    IDOS->PrintFault(IDOS->IoErr(),"[DMP]BufferedCopy():src");
-DBUG("ERROR src\n");
-//IExec->DebugPrintF("ERROR src\n");
+//DBUG("ERROR src\n");
   }
 
   IDOS->FClose(tgt);
@@ -978,8 +992,7 @@ DBUG("ERROR src\n");
  else
  {
   IDOS->PrintFault(IDOS->IoErr(),"[DMP]BufferedCopy():tgt");
-DBUG("ERROR tgt\n");
-//IExec->DebugPrintF("ERROR tgt\n");
+//DBUG("ERROR tgt\n");
  }
 
  return error;
@@ -1021,6 +1034,7 @@ void WakeWindow(struct Window *win, APTR lock)
  {
   IIntuition->EndRequest(lock, win);
   IExec->FreeVec(lock);
+  lock = NULL;
   IIntuition->SetWindowPointer(win, TAG_END);
  }
 }
@@ -1113,4 +1127,42 @@ struct Screen *FrontMostScr(void)
 
 //DBUG("%lx\n", (int)public_screen_address);
  return(public_screen_address);
+}
+
+struct Node *getSavedThemeNode(struct List *list, CONST_STRPTR saved_theme)
+{
+	struct Node *n = IExec->GetHead(list);
+	STRPTR name;
+DBUG("getSavedThemeNode('%s')\n",saved_theme);
+
+	for(; n!=NULL; n=IExec->GetSucc(n))
+	{
+		IChooser->GetChooserNodeAttrs(n, CNA_Text,&name, TAG_DONE);
+//DBUG("%-24s <-?-> '%s'\n",name,saved_theme);
+		if(IUtility->Stricmp(name,saved_theme) == 0) break;
+	}
+DBUG("node = 0x%08lx ('%s')\n",n,name);
+
+return(n);
+}
+
+BOOL usePointers(CONST_STRPTR s, struct Window *w)
+{
+	BOOL ret = FALSE;
+DBUG("usePointers('%s')\n",s);
+	if(DeletePointers() == 0)
+	{
+		DoMessage( (STRPTR)GetString(&li,MSG_ERROR_DEL_POINTERS), REQIMAGE_INFO, NULL );
+		ret = TRUE;
+	}
+
+	if(CopyPointers(s) != 0)
+	{
+		APTR lock = SleepWindow(w);
+		DoMessage( (STRPTR)GetString(&li,MSG_ERROR_COPY_POINTERS), REQIMAGE_WARNING, NULL );
+		WakeWindow(w, lock);
+		ret = TRUE;
+	}
+
+	return(ret);
 }

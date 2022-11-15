@@ -47,22 +47,12 @@ enum {
  LAST_NUM
 };
 
-#ifdef _AEON_
-enum
-{
- COL_IMG = 1,
- COL_TXT,
- TOT_COL = COL_TXT
-};
-#else
-enum
-{
+enum {
  COL_IMG = 0,
  COL_TXT,
  TOT_COL
 };
 //#define TOTALCOLUMNS  COL_LAST
-#endif
 
 
 //struct Library *DOSBase;
@@ -101,21 +91,23 @@ Class *ButtonClass, *RequesterClass, *LayoutClass, *WindowClass,
 #endif
 
 
-BOOL OpenLibs(int32);
+BOOL OpenLibs(uint32);
 void CloseLibs(void);
 void DMP_from_WB(void);
-void DMPwindow(int32, struct List *);
+void DMPwindow(int32, struct List *, struct Node *);
 int32 ListDMP_WB(STRPTR);
 int32 make_chooser_list(struct List *);
 void free_chooser_list(struct List *);
 int32 DeletePointers(void);
-int CopyPointers(STRPTR);
+int CopyPointers(CONST_STRPTR);
 BOOL BufferedCopy(CONST_STRPTR, CONST_STRPTR);
 APTR SleepWindow(struct Window *);
 void WakeWindow(struct Window *, APTR);
 uint32 DoMessage(char *, char, STRPTR);
 struct Screen *FrontMostScr(void);
 void sort_chooserlist(int32, struct List *, struct Hook *);
+struct Node *getSavedThemeNode(struct List *, CONST_STRPTR);
+BOOL usePointers(CONST_STRPTR, struct Window *);
 
 
 #endif

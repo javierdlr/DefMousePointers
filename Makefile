@@ -53,7 +53,7 @@ clean: clean-custom
 
 realclean:
 	@echo "Cleaning compiler objects and targets..."
-	@rm -f  $(DefMousePointers_OBJ) DefMousePointers
+	@rm -f  $(DefMousePointers_OBJ) DefMousePointers DefMousePointers.debug
 
 
 ###################################################################
@@ -64,9 +64,11 @@ realclean:
 
 DefMousePointers: $(DefMousePointers_OBJ)
 	@echo "Linking DefMousePointers.debug"
-	@gcc:bin/gcc -o DefMousePointers.debug $(DefMousePointers_OBJ) -N
+#	@gcc:bin/gcc -o DefMousePointers.debug $(DefMousePointers_OBJ) -N
+	@gcc:bin/gcc -o DefMousePointers.debug $(DefMousePointers_OBJ)
 	@echo "Creating debug target: DefMousePointers"
-	@cp -f -p DefMousePointers.debug DefMousePointers
+#	@cp -f -p DefMousePointers.debug DefMousePointers
+	@copy DefMousePointers.debug DefMousePointers FORCE CLONE
 
 
 ###################################################################
@@ -97,6 +99,7 @@ DMP_cli.o: DMP_cli.c DMP_global.h DMP_rev.h \
 
 DMP_strings.h: DefMousePointers.cd 
 	APPDIR:Catcomp DefMousePointers.cd CFILE DMP_strings.h
+	$(MAKE) clean
 
 
 ###################################################################
