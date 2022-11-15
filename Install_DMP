@@ -1,0 +1,178 @@
+;$VER: DefMousePointer_INSTALL 0.2 (14.11.2022)
+;
+
+
+(set @app-name "DefMousePointers")
+(set @default-dest "RAM:")
+(set #bak-drawer "SYS:Prefs/Presets/BackupPointers")
+
+(set #dmpn (getversion "DefMousePointers/DefMousePointers"))
+(set #dmpv (/ #dmpn 65536))
+(set #dmpr (- #dmpn (* #dmpv 65536)))
+
+(set #language (getenv "languagename"))
+(set #lang-found 0)
+(complete 0)
+;
+
+; YOUR LANGUAGE HERE
+;(if (= #language "italian")
+;(
+;  (set #lang-found 1)
+;
+;)
+;)
+; YOUR LANGUAGE HERE
+
+
+; YOUR LANGUAGE HERE
+;(if (= #language "german")
+;(
+;  (set #lang-found 1)
+;
+;)
+;)
+; YOUR LANGUAGE HERE
+
+
+;...et al
+
+
+;(SPANISH)
+(if (= #language "spanish")
+(
+  (set #lang-found 1)
+
+  (set #welcome-msg (cat
+"Bienvenido a " @app-name " " #dmpv "." #dmpr "\n"
+))
+  (set #message-first (cat
+"PRIMERO realizaremos una copia de seguridad de los ficheros \"ENVARC:Sys/def_#?pointer.info\" a \"" #bak-drawer "\""
+))
+  (set #copying-msg (cat
+"Copiando \"def_#?pointer.info\" en \"" #bak-drawer "\""
+))
+  (set #bckupdone-msg (cat
+"¡COPIA DE SEGURIDAD HECHA!\n\nAhora BORRAREMOS los ficheros\n\"ENVARC:Sys/def_#?pointer.info\".\n"
+))
+  (set #select-msg (cat
+"Elije donde copiar/instalar el cajón \"DefMousePointers\" y su contenido."
+))
+  (set #customdrw-msg (cat
+"La copia de seguridad de los punteros se va a copiar a un cajón \'custom\' de " @app-name ".\n"
+))
+  (set #exit-msg (cat
+@app-name " instalado.\n\nLee la documentación.\n\nRecuerda que tienes una copia (de seguridad) de tus punteros en \"" #bak-drawer "\""
+))
+)
+)
+
+
+;default (ENGLISH)
+(if (= #lang-found 0)
+(
+;copy,paste&translate from here into your language
+  (set #welcome-msg (cat
+"Welcome to " @app-name " " #dmpv "." #dmpr "\n"
+))
+  (set #message-first (cat
+"FIRST we are going to make a backup of your \"ENVARC:Sys/def_#?pointer.info\" files to \"" #bak-drawer "\""
+))
+  (set #copying-msg (cat
+"Copying \"def_#?pointer.info\" to \"" #bak-drawer "\""
+))
+  (set #bckupdone-msg (cat
+"BACKUP DONE!\n\nNow we're going to DELETE\n\"ENVARC:Sys/def_#?pointer.info\" files.\n"
+))
+  (set #select-msg (cat
+"Select where to copy/install \"DefMousePointers\" drawer and its contents."
+))
+  (set #customdrw-msg (cat
+"Backup\'ed pointers are going to be copied into a \'custom\' pointer drawer.\n"
+))
+  (set #exit-msg (cat
+@app-name " installed.\n\nRead documentation.\n\nRemember that you have a copy/backup of your pointers in \"" #bak-drawer "\""
+))
+;copy,paste&translate 'til here into your language
+)
+)
+
+;;;;;;;;;
+
+(welcome #welcome-msg)
+(complete 0)
+;
+
+(message #message-first)
+(makedir #bak-drawer
+  (help @makedir-help)
+  (infos)
+)
+(complete 5)
+;
+
+(copyfiles
+  (prompt #copying-msg)
+  (help @copyfiles-help)
+  (source "ENVARC:Sys/")
+  (dest #bak-drawer)
+  (pattern "def_#?pointer.info")
+  (files)
+)
+(complete 20)
+;
+
+(message #bckupdone-msg)
+(run ("C:delete >NIL: ENVARC:Sys/def_#?pointer.info"))
+(complete 25)
+;
+
+(set #defdir
+   (askdir
+      (prompt #select-msg)
+      (help @askdir-help)
+      (default @default-dest)
+   )
+)
+(set @default-dest (tackon #defdir "DefMousePointers"))
+(makedir @default-dest
+   (prompt #creating-dir @default-dest)
+   (infos)
+)
+(complete 30)
+;
+
+(copyfiles
+  (source "DefMousePointers")
+  (dest @default-dest)
+  (infos)
+  (all)
+)
+(complete 85)
+;
+
+(set #ml-src (tackon @default-dest "DefMousePointers"))
+(set #ml-dst (tackon @default-dest "DefMousePointers_GUI"))
+(set #makelink_cmd (cat "C:makelink >NIL: " #ml-dst " " #ml-src))
+(run #makelink_cmd)
+(complete 90)
+;
+
+(message #customdrw-msg)
+;only usefull in real instalaltion mode
+(if (= @pretend 0)
+(
+(set #custom-pointers (tackon @default-dest "POINTERS/custom"))
+(copyfiles
+  (source #bak-drawer)
+  (dest #custom-pointers)
+  (infos)
+  (all)
+)
+)
+)
+(complete 99)
+;
+
+(exit #exit-msg)
+(complete 100)
