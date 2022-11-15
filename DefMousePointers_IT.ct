@@ -1,16 +1,15 @@
-## version $VER: DefMousePointers.catalog 50.1 (15.08.2015)
+## version $VER: DefMousePointers.catalog 50.1 (13.11.2022)
 ## codeset 0
 ## language italiano
-## chunk AUTH Translated by Samir Hawamdeh (http://www.betatesting.it/backforthefuture)
+;## chunk AUTH Translated by Samir Hawamdeh (http://www.betatesting.it/backforthefuture)
 ;
 ; ATO Italia
-; Compiled with FlexCat 2.17 PPC (AmigaOS4)
+; Compiled with FlexCat 2.18 PPC (AmigaOS4)
 ; flexcat DefMousePointers.cd DefMousePointers.ct catalog=DefMousePointers.catalog
 ; 
 ; Italian translation of DefMousePointers
 ;
 ; Traduzione italiana di DefMousePointers
-;
 ;
 ; GUI STRINGS
 ;
@@ -46,7 +45,6 @@ MSG_GUI_CHOOSER_INFO
 Il tema selezionato contiene %ld puntatori del mouse
 ; Selected theme has %ld mouse pointers
 ;
-;
 ; MISC
 ;
 MSG_OK_GAD
@@ -56,7 +54,6 @@ _OK
 MSG_CONT_CANCEL_GAD
 _Continua|_Annulla
 ; C_ontinue|_Cancel
-;
 ;
 ; ERRORS/WARNINGS (WB/CLI)
 ;
@@ -71,32 +68,34 @@ Impossibile allocare memoria per la copia dei puntatori.\n
 MSG_ERROR_LIB
 Impossibile aprire '%s' V%ld!
 ; Can't open '%s' V%ld!
+;
 ; LIBRARY/CLASS NAME, VERSION
 ;
 MSG_ERROR_OPEN
 Impossibile aprire '%s'!
 ; Can't open '%s'!
+;
 ; IFACE NAME
 ;
 MSG_ERROR_COPY_POINTERS
-Errores durante la copia del nuovo tema puntatori.
+Errori durante la copia del nuovo tema puntatori.
 ; Errors while copying new theme pointer.
 ;
 MSG_ERROR_DEL_POINTERS
-\033cAlcuni puntatori sembrano essere inutilizzati perciò\n\
-non potranno essere cancellati (sono inesistenti ?)
+\033cAlcuni puntatori sembrano essere inutilizzati perciò non\n\
+potranno essere cancellati (sono forse inesistenti?)
 ; \033cSome unused pointers couldn't be deleted.\n\
 ; (non existing?)
 ;
 MSG_SAVE_WARNING
 \033cI puntatori che non fanno parte del tema '\033b%s\033n'\n\
-saranno cancellati dal tuo computer!
+verranno cancellati dal tuo computer!
 ; \033cPointers not being part of '\033b%s\033n' theme\n\
 ; will be deleted on your system!
 ; NAME OF THEME POINTER
 ;
 MSG_WARN_NO_POINTERTHEMES
-\033cImpossibile caricare i temi puntatore,\n\
+\033cImpossibile caricare i temi del puntatore,\n\
 uscita da DefMousePointers.
 ; \033cCan't load pointer themes,\n\
 ; quitting DefMousePointers.
@@ -113,8 +112,8 @@ MSG_ERROR_POINTERSDRAWER
 ; ERROR (IOERR) MESSAGE
 ;
 MSG_WARN_NO_POINTERFILES
-\033cAlmeno un puntatore nella cartella del tema\n\
-sembra essere vuoto, uscita da DefMousePointers.
+\033cAlmeno un puntatore nella cartella del tema sembra\n\
+essere vuoto, uscita da DefMousePointers.
 ; \033cAt least one pointer theme drawer seems\n\
 ; empty, quitting DefMousePointers.
 ;
@@ -122,17 +121,26 @@ MSG_ERROR_COPY_POINTERTHEME
 Impossibile caricare il tema puntatori '%s': %s.\n
 ; Failed to load pointer theme '%s': %s.\n
 ;
+;  NAME OF THEME POINTER; ERROR (IOERR) MESSAGE
+;
+MSG_ERROR_POINTER_DATA
+Dati puntatore
+; Pointer data
+;
+MSG_ERROR_NOCONTEXT
+Contesto
+; Context
 ;
 ; CLI/SHELL STRINGS
 ;
 MSG_CLI_TRANSLATOR
-Traduzione italiana a cura di Samir Hawamdeh
+ Traduzione italiana a cura di Samir Hawamdeh
 ; \0
 ; WHATEVER YOU WANT. ex.: ' Localization by MeMyselfAndI'
 ;
 MSG_CLI_ABOUT
-Copia tema puntatori (precedentemente salvato con la sua GUI) in 'ENV:Sys/'.\n\
-Lancialo dal Workbench per usufruire dell'interfaccia ReAction.\n
+Copia tema puntatori (precedentemente salvato assieme alla sua GUI) in 'ENV:Sys/'.\n\
+Avvialo dal Workbench per usufruire dell'interfaccia ReAction.\n
 ; Copy pointer theme (previously saved with its GUI) to 'ENV:Sys/'.\n\
 ; Launch it from WB to get a nice ReAction GUI.\n
 ;
@@ -144,4 +152,8 @@ MSG_CLI_INFO
 Copiato tema puntatori '%s' contenente %ld puntatori in '%s'.\n
 ; Copied '%s' pointer theme with %ld pointers to '%s'.\n
 ; POINTER THEME NAME, POINTERS NUMBER, DESTINATION DRAWER
+;
+MSG_CLI_FAILED_CENTERMOUSE
+Impossibile centrare il puntatore del mouse!
+; Failed to center mouse pointer!
 ;

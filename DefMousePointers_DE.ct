@@ -1,136 +1,136 @@
 ## version $VER: defmousepointers.catalog 1.0 (8.11.2022)
 ## codeset 4
-## language spanish
+## language german
 ;
 MSG_GUI_GROUP_CHOOSER
-Temas De Punteros
+Mauszeiger Sammlung
 ; Mouse Pointers Themes
 ;
 MSG_GUI_GROUP_LB
-Punteros Disponibles Del Tema
+Verfügbare Mauszeiger
 ; Available Mouse Pointers
 ;
 MSG_GUI_LB_NAME
-Nombre
+Name
 ; Name
 ;
 MSG_GUI_LB_IMAGE
-Imagen
+Bild
 ; Image
 ;
 MSG_GUI_SAVE
-_Guardar
+_Speichern
 ; _Save
 ;
 MSG_GUI_USE
-_Usar
+_Verwenden
 ; _Use
 ;
 MSG_GUI_QUIT
-_Salir
+_Beenden
 ; _Quit
 ;
 MSG_GUI_CHOOSER_INFO
-El tema tiene %ld punteros
+Ausgewählte Sammlung hat %ld Mauszeiger
 ; Selected theme has %ld mouse pointers
 ;
 ;
 MSG_OK_GAD
-_Aceptar
+_Ok
 ; _OK
 ;
 MSG_CONT_CANCEL_GAD
-C_ontinuar|_Cancelar
+W_eiter|_Abbrechen
 ; C_ontinue|_Cancel
 ;
 ;
 MSG_ERROR_NOGUI
-Fallo al abrir clase ReAction.
+Fehler beim Öffnen der Reactionklassen.
 ; Failed to open ReAction classes.
 ;
 MSG_ERROR_BCOPY_MEM
-No se puede asignar memoria para copiar punteros.
+Nicht genug Speicher zum kopieren der Mauszeiger!\n
 ; Can't allocate memory for copying pointers.\n
 ;
 MSG_ERROR_LIB
-¡No se puede abrir '%s' V%ld!
+Öffnen von '%s' nicht möglich! V%ld!
 ; Can't open '%s' V%ld!
 ;
 MSG_ERROR_OPEN
-¡No se puede abrir '%s'!
+Öffnen von '%s' nicht möglich!
 ; Can't open '%s'!
 ;
 MSG_ERROR_COPY_POINTERS
-Error al copiar nuevo tema.
+Fehler beim Kopieren der neuen Zeigersammlung.
 ; Errors while copying new theme pointer.
 ;
 MSG_ERROR_DEL_POINTERS
-\033cAlgunos punteros no se pudieron borrar.\n\
-(no existian en 'ENV:Sys/')
+\033cEinige ungenutzte Zeiger konnten nicht entfernt werden.\n\
+(nicht vorhanden in 'ENV:Sys/'?)
 ; \033cSome unused pointers couldn't be deleted.\n\
 ; (non existing?)
 ;
 MSG_SAVE_WARNING
-\033c¡Punteros que no pertenencen\n\
- al tema \033b%s \033n\n\
-se borrarán de su sistema!
+\033cMauszeiger, die nicht zur verwendeten\n\
+\033b%s \033nSammlung gehören,\n\
+werden aus dem System entfernt!
 ; \033cPointers not being part of \033b%s \033ntheme\n\
 ; will be deleted on your system!
 ;
 MSG_WARN_NO_POINTERTHEMES
-\033cNo se pueden cargar temas de punteros.\n\
-Interrumpiendo DefMousePointers.
+\033cLaden der Mauzeigersammlung nicht möglich.\n\
+DefMousePointers wird beendet.
 ; \033cCan't load pointer themes,\n\
 ; quitting DefMousePointers.
 ;
 MSG_WARN_NOPREFSFILE
-¡Fichero de ajustes '%s' no encontrado!\n
+Keine Voreinstellungsdatei '%s' gefunden!\n
 ; No prefs file '%s' found!\n
 ;
 MSG_ERROR_POINTERSDRAWER
-\033cFallo al cargar cajón 'POINTERS':\n\
-%s.
+\033cFehler beim Laden des 'POINTERS'\n\
+Unterverzeichnisses: %s.
 ; \033cFailed to load 'POINTERS' drawer:\n\
 ; %s.
 ;
 MSG_WARN_NO_POINTERFILES
-\033cParece que algun cajón con temas de punteros\n\
-está vacío, interrumpiendo DefMousePointers.
+\033cMindestens eines der Unterverzeichnisse\n\
+scheint leer zu sein, beende DefMousePointers.
 ; \033cAt least one pointer theme drawer seems\n\
 ; empty, quitting DefMousePointers.
 ;
 MSG_ERROR_COPY_POINTERTHEME
-\033cFallo al cargar cajón tema '%s':%s.\n
+\033cFehler beim Laden der Mauszeigersammlung '%s': %s.\n
 ; Failed to load pointer theme '%s': %s.\n
 ;
 MSG_ERROR_POINTER_DATA
-Datos del cursor
+Mauszeigerdaten
 ; Pointer data
 ;
 MSG_ERROR_NOCONTEXT
-Contexto
+Kontext
 ; Context
 ;
 ;
 MSG_CLI_TRANSLATOR
- Traducción: Javier de las Rivas
+ Übersetzung: Hubert Maier
 ; \0
 ;
 MSG_CLI_ABOUT
-Copiar tema de punteros (guardado desde la interfaz/GUI) a 'ENV:Sys/'.\n\
-Ejecutarlo desde WB para mostrar su interfaz/GUI.\n
+Kopiere die Mauszeiger (gespeichert von der Benutzeroberfläche) nach 'ENV:Sys/'.\n\
+Starte es von der WB, um eine Reaction Oberfläche/GUI zu erhalten.\n
 ; Copy pointer theme (previously saved with its GUI) to 'ENV:Sys/'.\n\
 ; Launch it from WB to get a nice ReAction GUI.\n
 ;
 MSG_CLI_WRONG_ARGS
-¡Argumentos incorrectos!\n
+Fehlerhafte Argumente!\n
 ; Wrongs args!\n
 ;
 MSG_CLI_INFO
-Copiado tema '%s' con %ld punteros en '%s'.\n
+Mauszeigersammlung '%s' mit %ld Zeigern nach '%s' kopiert.\n
 ; Copied '%s' pointer theme with %ld pointers to '%s'.\n
 ;
 MSG_CLI_FAILED_CENTERMOUSE
-¡Fallo al centrar puntero de ratón!
+Mauszeiger konnte nicht zentriert werden!
 ; Failed to center mouse pointer!
 ;

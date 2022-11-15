@@ -1,4 +1,4 @@
-; $VER: defmousepointers.cd 50.1 (18.09.2019)
+; $VER: defmousepointers.cd 50.1 (8.11.2022)
 ;
 ;
 ; GUI STRINGS
@@ -39,66 +39,73 @@ C_ontinue|_Cancel
 MSG_ERROR_NOGUI (11//)
 Failed to open ReAction classes.
 ;
-MSG_ERROR_BCOPY_MEM (12//)
+MSG_ERROR_BCOPY_MEM (//)
 Can't allocate memory for copying pointers.\n
 ;
-MSG_ERROR_LIB (13//500)
+MSG_ERROR_LIB (//500)
 Can't open '%s' V%ld!
 ; LIBRARY/CLASS NAME, VERSION
 ;
-MSG_ERROR_OPEN (14//500)
+MSG_ERROR_OPEN (//500)
 Can't open '%s'!
 ; IFACE NAME
 ;
-MSG_ERROR_COPY_POINTERS (15//)
+MSG_ERROR_COPY_POINTERS (//)
 Errors while copying new theme pointer.
 ;
-MSG_ERROR_DEL_POINTERS (16//)
+MSG_ERROR_DEL_POINTERS (//)
 \033cSome unused pointers couldn't be deleted.\n\
 (non existing in 'ENV:Sys/')
 ;
-MSG_SAVE_WARNING (17//500)
+MSG_SAVE_WARNING (//500)
 \033cPointers not being part of\n\
 \033b%s \033ntheme\n\
 will be deleted on your system!
 ; NAME OF THEME POINTER
 ;
-MSG_WARN_NO_POINTERTHEMES (18//)
+MSG_WARN_NO_POINTERTHEMES (//)
 \033cCan't load pointer themes,\n\
 closing DefMousePointers.
 ;
-MSG_WARN_NOPREFSFILE (19//)
+MSG_WARN_NOPREFSFILE (//)
 No prefs file '%s' found!\n
 ;
-MSG_ERROR_POINTERSDRAWER (20//)
+MSG_ERROR_POINTERSDRAWER (//)
 \033cFailed to load 'POINTERS' drawer:\n\
 %s.
 ; ERROR (IOERR) MESSAGE
 ;
-MSG_WARN_NO_POINTERFILES (21//)
+MSG_WARN_NO_POINTERFILES (//)
 \033cAt least one pointer theme drawer seems\n\
 empty, closing DefMousePointers.
 ;
-MSG_ERROR_COPY_POINTERTHEME (22//)
+MSG_ERROR_COPY_POINTERTHEME (//)
 Failed to load pointer theme '%s': %s.\n
 ;  NAME OF THEME POINTER; ERROR (IOERR) MESSAGE
 ;
+MSG_ERROR_POINTER_DATA (//)
+Pointer data
+;
+MSG_ERROR_NOCONTEXT (//)
+Context
+;
+;
 ; CLI/SHELL STRINGS
-MSG_CLI_TRANSLATOR (23//100)
+MSG_CLI_TRANSLATOR (30//100)
 \0
 ; WHATEVER YOU WANT. ex.: ' Localization by MeMyselfAndI'
 ;
-MSG_CLI_ABOUT (24//)
+MSG_CLI_ABOUT (//)
 Copy pointer theme (previously saved with its GUI) to 'ENV:Sys/'.\n\
 Launch it from WB to get a nice ReAction GUI.\n
 ;
-MSG_CLI_WRONG_ARGS (25//)
+MSG_CLI_WRONG_ARGS (//)
 Wrongs args!\n
 ;
-MSG_CLI_INFO (26//)
+MSG_CLI_INFO (//)
 Copied '%s' pointer theme with %ld pointers to '%s'.\n
 ; POINTER THEME NAME, TOTAL POINTERS, DESTINATION DRAWER
 ;
-MSG_CLI_FAILED_CENTERMOUSE (27//)
+MSG_CLI_FAILED_CENTERMOUSE (//)
 Failed to center mouse pointer!
 ;
